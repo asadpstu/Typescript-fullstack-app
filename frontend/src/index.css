@@ -1,0 +1,98 @@
+.my-select {
+    height: 30px; /* Adjust the height as needed */
+    width: 22%; /* Adjust the width as needed */
+  }
+  
+  .my-input {
+    height: 30px; /* Adjust the height as needed */
+    width: 23%; /* Adjust the width as needed */
+    border-right: 0;
+  }
+  .my-button{
+    height: 30px; /* Adjust the height as needed */
+    width: 13%; /* Adjust the width as needed */
+    border-left: 0;
+    background-color: #ddd;
+    cursor: pointer;
+    border-radius: 0px 5px 5px 0px;
+  }
+  .my-input-space{
+    width: 30%;
+    margin-right: 2%;
+    margin-left: 2%;
+  }
+  .load-more{
+    position: fixed;
+    left: 50%;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    padding: 10px;
+    background-color: #ddd;
+  }
+
+  .fixed-button {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    padding: 5px;
+    background-color: #ddd;
+    box-shadow: 0px -5px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .no-data{
+    color: #000;
+    font-weight: bold;
+    align-content: center;
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  .reset{
+    color: red;
+    font-weight: bold;
+    align-content: center;
+    text-align: center;
+    margin-top: 20px;
+    cursor: pointer;
+    margin-left: 5px;
+  }
+  .add-custom-label{
+    font-size: 15px;
+    font-weight: bold;
+    margin-top: 20px;
+    border-bottom: 2px solid #ddd;
+    width: 140px;
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+    margin-left: 5px;
+    color: darkgrey;
+
+  }
+  .add-custom-list-check{
+    margin: 5px;
+    font-size: 15px;
+  }
+  .recipe-title{
+    font-weight: bold;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+  }
+  .radio-item{
+    margin: 5px;
+  }
+  .radio-item-gap{
+    margin-right: 5px;
+  }
+  .header{
+    padding-left: 2%;
+    padding-right: 2%;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+  }
