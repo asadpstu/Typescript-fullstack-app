@@ -1,4 +1,4 @@
-# Project Name
+# Project Name : Recipe App
 
 ## Docker Setup
 
@@ -39,7 +39,10 @@
     docker-compose up --build
     ```
 
-## Additional Information
 
-Include any additional information about the project, troubleshooting tips, or other relevant details.
+### Browse app:
 
+Navigate to Chrome/Any browser:
+    ```
+    http://localhost:3000
+    ```
