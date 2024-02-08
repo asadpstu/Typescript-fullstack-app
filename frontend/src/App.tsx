@@ -1,6 +1,6 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import MyFavourite from './MyFavourite';
+import MyFavourite from './component/MyFavourite';
 
 const App: React.FC = () => {
   return (

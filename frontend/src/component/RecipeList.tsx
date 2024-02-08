@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import AppConfig from './config';
-import { Author, Recipe } from './type/interface';
+import AppConfig from '../config';
+import { Author, Recipe } from '../type';
 
 const RecipeList: React.FC<{ author?: string, listName: string, customList: Author[] }> = ({ author, listName, customList }) => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);

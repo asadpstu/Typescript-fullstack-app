@@ -6,7 +6,7 @@ import {
     getRecipeLists,
     addRecipesToList,
     getRecipeListDetails 
-} from './controller';
+} from '../controller';
 
 const router = Router();
 

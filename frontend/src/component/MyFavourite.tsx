@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import RecipeList from './RecipeList';
-import AppConfig from './config';
-import { Author } from './type/interface';
+import AppConfig from '../config';
+import { Author } from '../type';
 
 const MyFavourite: React.FC = () => {
   const [authors, setAuthors] = useState<Author[]>([]);
