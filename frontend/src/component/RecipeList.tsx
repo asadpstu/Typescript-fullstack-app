@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import AppConfig from '../config';
-import { Author, Recipe } from '../type';
+import { Author, FetchRecipes, Recipe, RecipePayload } from '../type';
+import { fetchData, postData } from '../service';
 
 const RecipeList: React.FC<{ author?: string, listName: string, customList: Author[] }> = ({ author, listName, customList }) => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
@@ -12,6 +13,7 @@ const RecipeList: React.FC<{ author?: string, listName: string, customList: Auth
   useEffect(() => {
     if (loadMore) {
       setTimeout(() => {
+        /* eslint-disable react-hooks/exhaustive-deps */
         fetchRecipes();
       }, 2000)
     }
@@ -21,50 +23,47 @@ const RecipeList: React.FC<{ author?: string, listName: string, customList: Auth
     setRecipes([]);
     setLoadMore(false);
     setPage(1);
+    /* eslint-disable react-hooks/exhaustive-deps */
     fetchRecipes();
   }, [author, listName])
 
-
-
-  const fetchRecipes = () => {
-    let url = `${AppConfig.API_BASEURL}/recipes?limit=${LIMIT}&page=${page}`
+  const fetchRecipes = async () => {
+    let url = `${AppConfig.API_BASEURL}/recipes?limit=${LIMIT}&page=${page}`;
     if (author && listName == '') {
-      url = `${AppConfig.API_BASEURL}/recipes?author=${author}&limit=${LIMIT}&page=${page}`
+      url = `${AppConfig.API_BASEURL}/recipes?author=${author}&limit=${LIMIT}&page=${page}`;
+    } else if (author && listName !== '') {
+      url = `${AppConfig.API_BASEURL}/author/${author}/list/${listName}`;
     }
-    else if (author && listName !== '') {
-      url = `${AppConfig.API_BASEURL}/author/${author}/list/${listName}`
+  
+    try {
+      const data = await fetchData<FetchRecipes>(url);
+      if (page == 1) {
+        setRecipes([]);
+      }
+      setTotalPages(data.totalPages);
+      setRecipes((prevRecipes) => [...prevRecipes, ...data.recipes]);
+    } catch (error) {
+      console.error('Error fetching recipes:', error);
+    } finally {
+      setLoadMore(false);
     }
-
-    fetch(url)
-      .then((response) => response.json())
-      .then((data) => {
-        if (page == 1) setRecipes([]);
-        setTotalPages(data.totalPages);
-        setRecipes((prevRecipes) => [...prevRecipes, ...data.recipes])
-      })
-      .catch((error) => console.error('Error fetching recipes:', error));
-    setLoadMore(false);
   };
+  
 
-  const handleCheckboxChange = (listName: string, recipe: Recipe) => {
-    fetch(`${AppConfig.API_BASEURL}/lists/${author}/${listName}/recipes`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
+  const handleCheckboxChange = async (listName: string, recipe: Recipe) => {
+    try{
+      await postData<RecipePayload>(`${AppConfig.API_BASEURL}/lists/${author}/${listName}/recipes`, {
         recipes: [
           { "Name": recipe.Name },
         ],
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        alert(`${data.message}`);
       })
-      .catch((error) => {
-        alert(`Error storing recipes.`);
-      });
+      alert('Recipes added to the list successfully.');  
+    }
+    catch(error)
+    {
+      console.error('Failed to add recipe to list:', error);
+    }
+    
   }
 
   const handleLoadMore = () => {

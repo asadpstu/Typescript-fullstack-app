@@ -6,7 +6,7 @@ export const redis = new Redis({
   port: config.REDIS_PORT
 });
 
-/*For local redis
+/*For local redis 
 export const redis = new Redis();
 */
  

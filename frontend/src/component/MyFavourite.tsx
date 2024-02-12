@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import RecipeList from './RecipeList';
+import { AddCustomList, Author, AuthorCustomList, UniqueAuthors } from '../type';
+import { fetchData, postData } from '../service';
 import AppConfig from '../config';
-import { Author } from '../type';
 
 const MyFavourite: React.FC = () => {
   const [authors, setAuthors] = useState<Author[]>([]);
@@ -29,61 +30,61 @@ const MyFavourite: React.FC = () => {
     setSelectedListName(value)
   };
 
-  const loadCustomList = () : void=> {
-    fetch(`${AppConfig.API_BASEURL}/lists/${selectedAuthor?.name}`)
-      .then((response) => response.json())
+  const loadCustomList = useCallback(() => {
+    fetchData<AuthorCustomList>(`${AppConfig.API_BASEURL}/lists/${selectedAuthor?.name}`)
       .then((data) => {
         const customList: Author[] = data.lists.map((name: string) => ({ name }));
         setCustomList(customList);
       })
       .catch((error) => console.error('Error fetching authors:', error));
-  }
+  }, [selectedAuthor]);
+  
 
-  const addCustomList = () : void => {
-    if (customListName.trim() === '') return;
-    fetch(`${AppConfig.API_BASEURL}/list`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
+  const addCustomList = async () => {
+    try {
+      if (customListName.trim() === '') return;
+      await postData<AddCustomList>(`${AppConfig.API_BASEURL}/list`, {
         author: selectedAuthor?.name,
         listName: customListName,
-      }),
-    })
-      .then((response) => response.json())
-      .then(() => {
-        setMessage('Added!')
-        setCustomListName('');
-        loadCustomList();
-        setTimeout(() => {
-          setMessage('Add');
-        }, 2000)
-      })
-      .catch(() => {
-        setMessage('Failed!')
-        setTimeout(() => {
-          setMessage('Add');
-        })
       });
+
+      setMessage('Added!');
+      setCustomListName('');
+      await loadCustomList();
+
+      setTimeout(() => {
+        setMessage('Add');
+      }, 2000);
+    } catch (error) {
+      console.error('Error adding custom list:', error);
+      setMessage('Failed!');
+      setTimeout(() => {
+        setMessage('Add');
+      });
+    }
   };
 
+
   useEffect(() => {
-    fetch(`${AppConfig.API_BASEURL}/users`)
-      .then((response) => response.json())
-      .then((data) => {
+    const fetchAuthors = async () => {
+      try {
+        const data = await fetchData<UniqueAuthors>(`${AppConfig.API_BASEURL}/users`);
+        console.log(data)
         const authorList = data.uniqueAuthors.map((name: string) => ({ name }));
         setAuthors(authorList);
         if (authorList.length > 0) {
           setSelectedAuthor(authorList[0]);
         }
-      })
-      .catch((error) => console.error('Error fetching authors:', error));
+      } catch (error) {
+        console.error('Error fetching authors:', error);
+      }
+    };
+    fetchAuthors();
   }, []);
 
   useEffect(() => {
     loadCustomList();
-  }, [selectedAuthor])
+  }, [selectedAuthor, loadCustomList]);
 
   return (
     <React.Fragment>
