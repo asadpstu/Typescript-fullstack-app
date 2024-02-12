@@ -9,13 +9,13 @@ const dataPath = path.resolve(__dirname, '../store/recipes.json');
 
 export const users = (req: Request, res: Response): void => {
   const rawData = fs.readFileSync(dataPath, 'utf-8');
-  const recipes = JSON.parse(rawData);
-  recipes.forEach((recipe: any) => {
+  const recipes: Recipe[] = JSON.parse(rawData);
+  recipes.forEach((recipe) => {
     if (recipe.Author === null) {
       recipe.Author = 'Annonymous';
     }
   });
-  const uniqueAuthors = [...new Set(recipes.map((recipe: any) => recipe.Author))];
+  const uniqueAuthors = [...new Set(recipes.map((recipe) => recipe.Author))];
   res.json({ uniqueAuthors });
 };
 
